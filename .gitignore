@@ -1,0 +1,11 @@
+#Created automatically when the project is build
+.vs/
+bin/
+obj/
+NZWalks.csproj.user
+
+#Security stuff
+appsettings.json
+
+#The project will run without this.
+NZWalks.http
