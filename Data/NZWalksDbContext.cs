@@ -13,9 +13,10 @@ namespace NZWalks.Data
         {
 
         }
+        public DbSet<Difficulty> Difficulties { get; set; }
         public DbSet<Region> Regions { get; set; }
         public DbSet<Walk> Walks { get; set; }
-        public DbSet<Difficulty> Difficulties { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,21 +46,21 @@ namespace NZWalks.Data
 
             var walks = new List<Walk>()
             {
-                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000001"), Name = "Tongariro Alpine Crossing", Description = "Spectacular volcanic walk", LengthInKm = 19.4, WalkImageUrl = null, DifficultyId = difficulties[2].Id, RegionId = regions[6].Id, Difficulty = difficulties[2], Region = regions[6] },
-                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000002"), Name = "Abel Tasman Coast Track", Description = "Coastal track with beaches", LengthInKm = 60, WalkImageUrl = null, DifficultyId = difficulties[1].Id, RegionId = regions[3].Id, Difficulty = difficulties[1], Region = regions[3] },
-                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000003"), Name = "Routeburn Track", Description = "Mountainous scenery", LengthInKm = 32, WalkImageUrl = null, DifficultyId = difficulties[2].Id, RegionId = regions[2].Id, Difficulty = difficulties[2], Region = regions[2] },
-                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000004"), Name = "Queen Charlotte Track", Description = "Coastal forest walk", LengthInKm = 70, WalkImageUrl = null, DifficultyId = difficulties[1].Id, RegionId = regions[8].Id, Difficulty = difficulties[1], Region = regions[8] },
-                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000005"), Name = "Kepler Track", Description = "Great walk with lakes and forests", LengthInKm = 60, WalkImageUrl = null, DifficultyId = difficulties[2].Id, RegionId = regions[9].Id, Difficulty = difficulties[2], Region = regions[9] },
-                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000006"), Name = "Heaphy Track", Description = "Diverse landscapes", LengthInKm = 78, WalkImageUrl = null, DifficultyId = difficulties[1].Id, RegionId = regions[4].Id, Difficulty = difficulties[1], Region = regions[4] },
-                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000007"), Name = "Mount Bruce Walk", Description = "Short easy nature walk", LengthInKm = 2, WalkImageUrl = null, DifficultyId = difficulties[0].Id, RegionId = regions[7].Id, Difficulty = difficulties[0], Region = regions[7] },
-                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000008"), Name = "Waitakere Ranges Track", Description = "Rainforest walk near Auckland", LengthInKm = 10, WalkImageUrl = null, DifficultyId = difficulties[1].Id, RegionId = regions[0].Id, Difficulty = difficulties[1], Region = regions[0] },
-                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000009"), Name = "Lake Waikaremoana Great Walk", Description = "Lakeside walk", LengthInKm = 46, WalkImageUrl = null, DifficultyId = difficulties[2].Id, RegionId = regions[5].Id, Difficulty = difficulties[2], Region = regions[5] },
-                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000010"), Name = "Paparoa Track", Description = "Coastal and forest walk", LengthInKm = 55, WalkImageUrl = null, DifficultyId = difficulties[1].Id, RegionId = regions[9].Id, Difficulty = difficulties[1], Region = regions[9] },
-                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000011"), Name = "Rakiura Track", Description = "Stewart Island walk", LengthInKm = 32, WalkImageUrl = null, DifficultyId = difficulties[1].Id, RegionId = regions[9].Id, Difficulty = difficulties[1], Region = regions[9] },
-                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000012"), Name = "Coromandel Coastal Walk", Description = "Scenic coastal walk", LengthInKm = 20, WalkImageUrl = null, DifficultyId = difficulties[0].Id, RegionId = regions[4].Id, Difficulty = difficulties[0], Region = regions[4] },
-                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000013"), Name = "Pouakai Circuit", Description = "Volcanic alpine circuit", LengthInKm = 35, WalkImageUrl = null, DifficultyId = difficulties[2].Id, RegionId = regions[6].Id, Difficulty = difficulties[2], Region = regions[6] },
-                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000014"), Name = "Queenstown Hill Walk", Description = "Hilltop views", LengthInKm = 5, WalkImageUrl = null, DifficultyId = difficulties[0].Id, RegionId = regions[9].Id, Difficulty = difficulties[0], Region = regions[9] },
-                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000015"), Name = "Te Araroa Trail", Description = "Long-distance trail", LengthInKm = 3000, WalkImageUrl = null, DifficultyId = difficulties[2].Id, RegionId = regions[0].Id, Difficulty = difficulties[2], Region = regions[0] }
+                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000001"), Name = "Tongariro Alpine Crossing", Description = "Spectacular volcanic walk", LengthInKm = 19.4, WalkImageUrl = null, DifficultyId = difficulties[2].Id, RegionId = regions[6].Id },
+                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000002"), Name = "Abel Tasman Coast Track", Description = "Coastal track with beaches", LengthInKm = 60, WalkImageUrl = null, DifficultyId = difficulties[1].Id, RegionId = regions[3].Id },
+                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000003"), Name = "Routeburn Track", Description = "Mountainous scenery", LengthInKm = 32, WalkImageUrl = null, DifficultyId = difficulties[2].Id, RegionId = regions[2].Id },
+                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000004"), Name = "Queen Charlotte Track", Description = "Coastal forest walk", LengthInKm = 70, WalkImageUrl = null, DifficultyId = difficulties[1].Id, RegionId = regions[8].Id },
+                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000005"), Name = "Kepler Track", Description = "Great walk with lakes and forests", LengthInKm = 60, WalkImageUrl = null, DifficultyId = difficulties[2].Id, RegionId = regions[9].Id },
+                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000006"), Name = "Heaphy Track", Description = "Diverse landscapes", LengthInKm = 78, WalkImageUrl = null, DifficultyId = difficulties[1].Id, RegionId = regions[4].Id },
+                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000007"), Name = "Mount Bruce Walk", Description = "Short easy nature walk", LengthInKm = 2, WalkImageUrl = null, DifficultyId = difficulties[0].Id, RegionId = regions[7].Id },
+                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000008"), Name = "Waitakere Ranges Track", Description = "Rainforest walk near Auckland", LengthInKm = 10, WalkImageUrl = null, DifficultyId = difficulties[1].Id, RegionId = regions[0].Id },
+                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000009"), Name = "Lake Waikaremoana Great Walk", Description = "Lakeside walk", LengthInKm = 46, WalkImageUrl = null, DifficultyId = difficulties[2].Id, RegionId = regions[5].Id },
+                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000010"), Name = "Paparoa Track", Description = "Coastal and forest walk", LengthInKm = 55, WalkImageUrl = null, DifficultyId = difficulties[1].Id, RegionId = regions[9].Id },
+                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000011"), Name = "Rakiura Track", Description = "Stewart Island walk", LengthInKm = 32, WalkImageUrl = null, DifficultyId = difficulties[1].Id, RegionId = regions[9].Id },
+                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000012"), Name = "Coromandel Coastal Walk", Description = "Scenic coastal walk", LengthInKm = 20, WalkImageUrl = null, DifficultyId = difficulties[0].Id, RegionId = regions[4].Id },
+                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000013"), Name = "Pouakai Circuit", Description = "Volcanic alpine circuit", LengthInKm = 35, WalkImageUrl = null, DifficultyId = difficulties[2].Id, RegionId = regions[6].Id },
+                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000014"), Name = "Queenstown Hill Walk", Description = "Hilltop views", LengthInKm = 5, WalkImageUrl = null, DifficultyId = difficulties[0].Id, RegionId = regions[9].Id },
+                new Walk { Id = Guid.Parse("aaaaaaaa-0000-0000-0000-000000000015"), Name = "Te Araroa Trail", Description = "Long-distance trail", LengthInKm = 3000, WalkImageUrl = null, DifficultyId = difficulties[2].Id, RegionId = regions[0].Id }
             };
             modelBuilder.Entity<Walk>().HasData(walks);
         }
