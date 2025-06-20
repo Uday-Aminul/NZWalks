@@ -15,6 +15,9 @@ namespace NZWalks.Mappings
             CreateMap<Region, RegionDto>();
             CreateMap<AddRegionRequestDto, Region>();
             CreateMap<UpdateRegionRequestDto, Region>();
+            CreateMap<Walk, WalkDto>();
+            CreateMap<UpdateWalkRequestDto, Walk>();
+            CreateMap<AddWalkRequestDto, Walk>();
         }
     }
 }
