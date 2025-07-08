@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using NZWalks.Data;
 using NZWalks.Mappings;
 using NZWalks.Repositories;
@@ -34,7 +35,11 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider =new PhysicalFileProvider(Path.Combine(builder.Environment.WebRootPath, "/Images")),
+    RequestPath="/Images"
+});
 app.MapControllers();
 
 app.Run();
