@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using NZWalks.Data;
 using NZWalks.Mappings;
+using NZWalks.Middlewires;
 using NZWalks.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +32,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseExceptionHandlerMiddlewire();
 
 app.UseHttpsRedirection();
 
