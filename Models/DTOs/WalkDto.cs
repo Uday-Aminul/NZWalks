@@ -14,5 +14,8 @@ namespace NZWalks.Models.DTOs
         public string? WalkImageUrl { get; set; }
         public Guid DifficultyId { get; set; }
         public Guid RegionId { get; set; }
+
+        public RegionDtoForWalks RegionDto{ get; set; }
+        public DifficultyDto DifficultyDto { get; set; }
     }
 }
