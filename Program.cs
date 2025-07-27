@@ -47,7 +47,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.UseStaticFiles(new StaticFileOptions()
 {
-    FileProvider =new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+    FileProvider =new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Images")),
     RequestPath="/Images"
 });
 app.MapControllers();
