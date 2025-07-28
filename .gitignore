@@ -9,3 +9,6 @@ appsettings.json
 
 #The project will run without this.
 NZWalks.http
+
+#Logs
+Logs/

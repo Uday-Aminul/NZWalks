@@ -18,6 +18,8 @@ namespace NZWalks.Mappings
             CreateMap<Walk, WalkDto>();
             CreateMap<UpdateWalkRequestDto, Walk>();
             CreateMap<AddWalkRequestDto, Walk>();
+            CreateMap<AddImageRequestDto, Image>();
+            CreateMap<Image, ImageDto>();
         }
     }
 }
