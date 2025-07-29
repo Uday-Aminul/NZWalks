@@ -43,15 +43,15 @@ namespace NZWalks.Repositories
             {
                 if (filterOn.Equals("Name", StringComparison.OrdinalIgnoreCase))
                 {
-                    walksQuery = walksQuery.Where(x => x.Name == filterValue);
+                    walksQuery = walksQuery.Where(x => x.Name.Contains(filterValue));
                 }
                 else if (filterOn.Equals("RegionName", StringComparison.OrdinalIgnoreCase))
                 {
-                    walksQuery = walksQuery.Where(x => x.Region.Name == filterValue);
+                    walksQuery = walksQuery.Where(x => x.Region.Name.Contains(filterValue));
                 }
                 else if (filterOn.Equals("RegionCode", StringComparison.OrdinalIgnoreCase))
                 {
-                    walksQuery = walksQuery.Where(x => x.Region.Code == filterValue);
+                    walksQuery = walksQuery.Where(x => x.Region.Code.Contains(filterValue));
                 }
             }
             if (string.IsNullOrWhiteSpace(sortOn) is false)
