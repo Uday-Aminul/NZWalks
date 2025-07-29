@@ -36,9 +36,34 @@ namespace NZWalks.Repositories
             return await dbContext.Regions.ToListAsync();
         }
 
-        public async Task<List<Region>> GetAllRegionAsync()
+        public async Task<List<Region>> GetAllRegionAsync(string? filterOn, string? filterBy, bool isAscending, string? sortOn, int pageNumber, int pageSize)
         {
-            return await dbContext.Regions.ToListAsync();
+            var regionsQuery = dbContext.Regions.Include(x=>x.Walks).AsQueryable();
+            if (string.IsNullOrWhiteSpace(filterOn) is false && string.IsNullOrWhiteSpace(filterBy) is false)
+            {
+                if (filterOn.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                {
+                    regionsQuery = regionsQuery.Where(x => x.Name.Contains(filterBy)).AsQueryable();
+                }
+                else if (filterOn.Equals("Code", StringComparison.OrdinalIgnoreCase))
+                {
+                    regionsQuery = regionsQuery.Where(x => x.Code.Contains(filterBy)).AsQueryable();
+                }
+            }
+            if (string.IsNullOrWhiteSpace(sortOn) is false)
+            {
+                if (sortOn.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                {
+                    regionsQuery = isAscending ? regionsQuery.OrderBy(x => x.Name) : regionsQuery.OrderByDescending(x => x.Name);
+                }
+                else if (sortOn.Equals("Code", StringComparison.OrdinalIgnoreCase))
+                {
+                    regionsQuery = isAscending ? regionsQuery.OrderBy(x => x.Code) : regionsQuery.OrderByDescending(x => x.Code);
+                }
+            }
+            var skip = (pageNumber - 1) * pageSize;
+            regionsQuery = regionsQuery.Skip(skip).Take(pageSize);
+            return await regionsQuery.ToListAsync();
         }
 
         public async Task<Region?> GetRegionByIdAsync(Guid id)
