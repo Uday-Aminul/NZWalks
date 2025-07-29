@@ -15,9 +15,13 @@ namespace NZWalks.Mappings
             CreateMap<Region, RegionDto>();
             CreateMap<AddRegionRequestDto, Region>();
             CreateMap<UpdateRegionRequestDto, Region>();
-            CreateMap<Walk, WalkDto>();
+            CreateMap<Walk, WalkDto>()
+            .ForMember(dest => dest.RegionDto, opt => opt.MapFrom(src => src.Region))
+            .ForMember(dest => dest.DifficultyDto, opt=> opt.MapFrom(src => src.Difficulty));
             CreateMap<UpdateWalkRequestDto, Walk>();
             CreateMap<AddWalkRequestDto, Walk>();
+            CreateMap<Region, RegionDtoForWalks>();
+            CreateMap<Difficulty, DifficultyDto>();
             CreateMap<AddImageRequestDto, Image>();
             CreateMap<Image, ImageDto>();
         }

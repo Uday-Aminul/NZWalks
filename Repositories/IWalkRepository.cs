@@ -8,7 +8,7 @@ namespace NZWalks.Repositories
 {
     public interface IWalkRepository
     {
-        Task<List<Walk>> GetAllWalkAsync();
+        Task<List<Walk>> GetAllWalkAsync(string? filterOn, string? filterValue, string? sortOn, bool isAscending, int pageNumber, int pageSize);
         Task<Walk?> GetWalkByIdAsync(Guid id);
         Task<Walk> CreateWalkAsync(Walk walk);
         Task<Walk?> UpdateWalkAsync(Guid id, Walk walk);
