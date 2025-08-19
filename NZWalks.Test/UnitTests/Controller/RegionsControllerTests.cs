@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NZWalks.Controllers;
 using NZWalks.Models.Domain;
@@ -58,12 +59,12 @@ namespace NZWalks.Test.UnitTests.Controller
                     Name = "Region 2"
                 }
             };
-            regionRepository.Setup(repo=>repo.GetAllRegionAsync(1, 10))
-
+            regionRepository.Setup(repo => repo.GetAllRegionAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(regions);
+            mapper.Setup(mapper => mapper.Map<List<RegionDto>>(regions)).Returns(regionDto);
             //Act
-            var result 
+            var result = regionsController.GetAll(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>());
             //Assert
-
+            var objectResult = Assert.IsType<OkObjectResult>(result);
         }
     }
 }
