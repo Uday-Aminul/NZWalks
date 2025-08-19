@@ -24,7 +24,7 @@ namespace NZWalks.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery]string? filterOn, [FromQuery]string? filterBy, [FromQuery]bool? isAscending,
-        [FromQuery] int pageNumber, [FromQuery]int pageSize, [FromQuery]string? sortOn)
+        [FromQuery]string? sortOn, [FromQuery] int pageNumber=1, [FromQuery]int pageSize=100)
         {
             var regionsDomain = await regionRepository.GetAllRegionAsync(filterOn, filterBy, isAscending??true, sortOn,pageNumber, pageSize);
             var regionsDto = mapper.Map<List<RegionDto>>(regionsDomain);
