@@ -127,7 +127,8 @@ namespace NZWalks.Test.UnitTests.Controller
             //Act
             var result = await regionsController.Delete(id1);
             //Assert
-
+            var okObjectResult = Assert.IsType<OkObjectResult>(result);
+            var returnValueType = Assert.IsAssignableFrom<List<RegionDto>>(okObjectResult.Value);
         }
 
         [Fact]
@@ -147,15 +148,48 @@ namespace NZWalks.Test.UnitTests.Controller
             var result = await regionsController.Update(id, updatedRegion);
 
             //Assert
-            
+            var okObjectResult = Assert.IsType<OkObjectResult>(result);
+            var returnValueType = Assert.IsAssignableFrom<RegionDto>(okObjectResult.Value);
+            Assert.Equal(regionDto.Name, returnValueType.Name);
+            Assert.Equal(regionDto.Code, returnValueType.Code);
+            Assert.Equal(regionDto.RegionImageUrl, returnValueType.RegionImageUrl);
         }
 
-        /*[Fact]
-        public Task RegionsController_Delete_ReturnsOk()
+        [Fact]
+        public async Task RegionsController_Create_ReturnsOk()
         {
             //Arrange
+            var id = Guid.NewGuid();
+            var newRegion = new AddRegionRequestDto
+            {
+                Code = "R002",
+                Name = "Region 2"
+            };
+            var regionDomain = new Region()
+            {
+                Id = id,
+                Code = "R002",
+                Name = "Region 2"
+            };
+            var regionDto = new RegionDto()
+            {
+                Id = id,
+                Code = "R002",
+                Name = "Region 2"
+            };
+            mapper.Setup(map => map.Map<Region>(newRegion)).Returns(regionDomain);
+            regionRepository.Setup(repo => repo.CreateRegionAsync(regionDomain)).ReturnsAsync(regionDomain);
+            mapper.Setup(map => map.Map<RegionDto>(regionDomain)).Returns(regionDto);
+
             //Act
+            var result = await regionsController.Create(newRegion);
+
             //Assert
-        }*/
+            var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
+            var returnValueType = Assert.IsAssignableFrom<RegionDto>(createdAtActionResult.Value);
+            Assert.Equal(regionDto.Name, returnValueType.Name);
+            Assert.Equal(regionDto.Code, returnValueType.Code);
+            Assert.Equal(regionDto.RegionImageUrl, returnValueType.RegionImageUrl);
+        }
     }
 }
