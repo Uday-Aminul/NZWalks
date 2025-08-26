@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using NZWalks.Data;
 using NZWalks.Models.Domain;
 using NZWalks.Models.DTOs;
@@ -17,10 +16,10 @@ using Xunit;
 
 namespace NZWalks.Tests.IntegrationTests.Controllers
 {
-    public class RegionsControllerIntregrationTests : IClassFixture<WebApplicationFactory<Program>>
+    public class RegionsControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly WebApplicationFactory<Program> _factory;
-        public RegionsControllerIntregrationTests(WebApplicationFactory<Program> factory)
+        public RegionsControllerIntegrationTests(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
         }
@@ -44,15 +43,16 @@ namespace NZWalks.Tests.IntegrationTests.Controllers
                     var context = scope.ServiceProvider.GetRequiredService<NZWalksDbContext>();
                     context.Regions.AddRange(new List<Region>()
                     {
-                        new Region { Id = Guid.NewGuid(), Code = "R001", Name = "Region 1" },
-                        new Region { Id = Guid.NewGuid(), Code = "R002", Name = "Region 2" }
+                    new Region { Id = Guid.NewGuid(), Code = "R001", Name = "Region 1" },
+                    new Region { Id = Guid.NewGuid(), Code = "R002", Name = "Region 2" }
                     });
                     context.SaveChanges();
                 });
             }).CreateClient();
 
             //Act
-            var response = await client.GetAsync("/api/regions");
+            var response = await client.GetAsync("/api/Regions");
+
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             var content = await response.Content.ReadAsStringAsync();
