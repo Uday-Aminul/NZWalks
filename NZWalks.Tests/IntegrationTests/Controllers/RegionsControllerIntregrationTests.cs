@@ -66,5 +66,46 @@ namespace NZWalks.Tests.IntegrationTests.Controllers
             Assert.Contains(regions, region => region.Code == "R001" && region.Name == "Region 1");
             Assert.Contains(regions, region => region.Code == "R002" && region.Name == "Region 2");
         }
+
+        [Fact]
+        public async Task GetById_WhenCalled_ReturnsOk()
+        {
+            //Arrange
+            var id = Guid.NewGuid();
+
+            var client = _factory.WithWebHostBuilder(builder => builder.ConfigureServices(async services =>
+            {
+                var serviceDescriptor = services.SingleOrDefault(sDescriotor => sDescriotor.ServiceType == typeof(NZWalksDbContext));
+                if (serviceDescriptor is not null)
+                {
+                    services.Remove(serviceDescriptor);
+                }
+                services.AddDbContext<NZWalksDbContext>(options => options.UseInMemoryDatabase("TestDb"));
+
+                var serviceProvider = services.BuildServiceProvider();
+                var scope = serviceProvider.CreateScope();
+                var dbContext = scope.ServiceProvider.GetRequiredService<NZWalksDbContext>();
+                await dbContext.Regions.AddAsync(new Region
+                {
+                    Id = id,
+                    Code = "R001",
+                    Name = "Region 1"
+                });
+                await dbContext.SaveChangesAsync();
+            })).CreateClient();
+
+            //Act
+            var response = await client.GetAsync($"api/Regions/{id}");
+
+            //Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var content = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            var regionDto = JsonSerializer.Deserialize<RegionDto>(content, options);
+            Assert.NotNull(regionDto);
+        }
     }
 }
