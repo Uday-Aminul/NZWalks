@@ -28,27 +28,7 @@ namespace NZWalks.Tests.IntegrationTests.Controllers
         public async Task GetAll_WhenCalled_ReturnsOk()
         {
             //Arrange
-            var client = _factory.WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureServices(services =>
-                {
-                    var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<NZWalksDbContext>));
-                    if (descriptor is not null)
-                    {
-                        services.Remove(descriptor);
-                    }
-                    services.AddDbContext<NZWalksDbContext>(options => options.UseInMemoryDatabase("TestDb"));
-                    var serviceProvider = services.BuildServiceProvider();
-                    using var scope = serviceProvider.CreateScope();
-                    var context = scope.ServiceProvider.GetRequiredService<NZWalksDbContext>();
-                    context.Regions.AddRange(new List<Region>()
-                    {
-                    new Region { Id = Guid.NewGuid(), Code = "R001", Name = "Region 1" },
-                    new Region { Id = Guid.NewGuid(), Code = "R002", Name = "Region 2" }
-                    });
-                    context.SaveChanges();
-                });
-            }).CreateClient();
+            var client = CustomClient();
 
             //Act
             var response = await client.GetAsync("/api/Regions");
@@ -73,26 +53,7 @@ namespace NZWalks.Tests.IntegrationTests.Controllers
             //Arrange
             var id = Guid.NewGuid();
 
-            var client = _factory.WithWebHostBuilder(builder => builder.ConfigureServices(async services =>
-            {
-                var serviceDescriptor = services.SingleOrDefault(sDescriotor => sDescriotor.ServiceType == typeof(NZWalksDbContext));
-                if (serviceDescriptor is not null)
-                {
-                    services.Remove(serviceDescriptor);
-                }
-                services.AddDbContext<NZWalksDbContext>(options => options.UseInMemoryDatabase("TestDb"));
-
-                var serviceProvider = services.BuildServiceProvider();
-                var scope = serviceProvider.CreateScope();
-                var dbContext = scope.ServiceProvider.GetRequiredService<NZWalksDbContext>();
-                await dbContext.Regions.AddAsync(new Region
-                {
-                    Id = id,
-                    Code = "R001",
-                    Name = "Region 1"
-                });
-                await dbContext.SaveChangesAsync();
-            })).CreateClient();
+            var client = CustomClient();
 
             //Act
             var response = await client.GetAsync($"api/Regions/{id}");
@@ -106,6 +67,32 @@ namespace NZWalks.Tests.IntegrationTests.Controllers
             };
             var regionDto = JsonSerializer.Deserialize<RegionDto>(content, options);
             Assert.NotNull(regionDto);
+        }
+
+        private HttpClient CustomClient()
+        {
+            var client = _factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureServices(services =>
+                {
+                    var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<NZWalksDbContext>));
+                    if (descriptor is not null)
+                    {
+                        services.Remove(descriptor);
+                    }
+                    services.AddDbContext<NZWalksDbContext>(options => options.UseInMemoryDatabase("TestDb"));
+                    var serviceProvider = services.BuildServiceProvider();
+                    using var scope = serviceProvider.CreateScope();
+                    var context = scope.ServiceProvider.GetRequiredService<NZWalksDbContext>();
+                    context.Regions.AddRange(new List<Region>()
+                    {
+                    new Region { Id = Guid.NewGuid(), Code = "R001", Name = "Region 1" },
+                    new Region { Id = Guid.NewGuid(), Code = "R002", Name = "Region 2" }
+                    });
+                    context.SaveChanges();
+                });
+            }).CreateClient();
+            return client;
         }
     }
 }
