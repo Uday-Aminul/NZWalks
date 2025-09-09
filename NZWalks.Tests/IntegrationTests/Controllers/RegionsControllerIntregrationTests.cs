@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Azure;
@@ -67,6 +68,23 @@ namespace NZWalks.Tests.IntegrationTests.Controllers
             };
             var regionDto = JsonSerializer.Deserialize<RegionDto>(content, options);
             Assert.NotNull(regionDto);
+        }
+
+        [Fact]
+        public async Task Delete_WhenCalled_ReturnsOk()
+        {
+            //Arrange
+            var id = Guid.NewGuid();
+            var client = _factory.CreateClient();
+
+            // Act
+            var response = await client.DeleteAsync($"/api/Regions/{id}");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadFromJsonAsync<List<RegionDto>>();
+            Assert.NotNull(content);
+            Assert.DoesNotContain(content, r => r.Id == id);
         }
 
         private HttpClient CustomClient()
