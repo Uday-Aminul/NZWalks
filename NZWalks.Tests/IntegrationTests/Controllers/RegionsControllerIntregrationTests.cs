@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using NZWalks.Controllers;
 using NZWalks.Data;
 using NZWalks.Models.Domain;
 using NZWalks.Models.DTOs;
