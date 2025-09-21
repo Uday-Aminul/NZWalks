@@ -88,6 +88,28 @@ namespace NZWalks.Tests.IntegrationTests.Controllers
             Assert.DoesNotContain(content, r => r.Id == id);
         }
 
+        [Fact]
+        public async Task Create_WhenCalled_ReturnsCreatedRegion()
+        {
+            // Arrange
+            var client = CustomClient();
+            var newRegion = new AddRegionRequestDto
+            {
+                Code = "R003",
+                Name = "Region 3"
+            };
+
+            // Act
+            var response = await client.PostAsJsonAsync("/api/Regions", newRegion);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            var createdRegion = await response.Content.ReadFromJsonAsync<RegionDto>();
+            Assert.NotNull(createdRegion);
+            Assert.Equal(newRegion.Code, createdRegion.Code);
+            Assert.Equal(newRegion.Name, createdRegion.Name);
+        }
+
         private HttpClient CustomClient()
         {
             var client = _factory.WithWebHostBuilder(builder =>
@@ -113,29 +135,5 @@ namespace NZWalks.Tests.IntegrationTests.Controllers
             }).CreateClient();
             return client;
         }
-
-        [Fact]
-        public async Task Create_WhenCalled_ReturnsCreatedRegion()
-        {
-            // Arrange
-            var client = CustomClient();
-            var newRegion = new AddRegionRequestDto
-            {
-                Code = "R003",
-                Name = "Region 3"
-            };
-
-            // Act
-            var response = await client.PostAsJsonAsync("/api/Regions", newRegion);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-
-            var createdRegion = await response.Content.ReadFromJsonAsync<RegionDto>();
-            Assert.NotNull(createdRegion);
-            Assert.Equal(newRegion.Code, createdRegion.Code);
-            Assert.Equal(newRegion.Name, createdRegion.Name);
-        }
-
     }
 }
