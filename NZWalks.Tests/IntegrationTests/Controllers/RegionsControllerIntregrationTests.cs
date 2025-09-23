@@ -110,6 +110,46 @@ namespace NZWalks.Tests.IntegrationTests.Controllers
             Assert.Equal(newRegion.Name, createdRegion.Name);
         }
 
+        [Fact]
+        public async Task Update_WhenCalled_ReturnsOk()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+            var regionId = Guid.NewGuid();
+
+            var createResponse = await client.PostAsJsonAsync("/api/regions", new
+            {
+                Id = regionId,
+                Code = "NZ-N",
+                Name = "North",
+                Area = 1000,
+                Lat = -36.8485,
+                Long = 174.7633,
+                Population = 1500000
+            });
+            createResponse.EnsureSuccessStatusCode();
+
+            var updateRequest = new
+            {
+                Code = "NZ-NE",
+                Name = "North East",
+                Area = 1200,
+                Lat = -36.0,
+                Long = 175.0,
+                Population = 1600000
+            };
+
+            // Act
+            var response = await client.PutAsJsonAsync($"/api/regions/{regionId}", updateRequest);
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            var updatedRegion = await response.Content.ReadFromJsonAsync<RegionDto>();
+            Assert.NotNull(updatedRegion);
+            Assert.Equal("NZ-NE", updatedRegion.Code);
+            Assert.Equal("North East", updatedRegion.Name);
+        }
+
         private HttpClient CustomClient()
         {
             var client = _factory.WithWebHostBuilder(builder =>
