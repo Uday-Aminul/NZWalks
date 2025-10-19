@@ -184,11 +184,115 @@ namespace NZWalks.Tests.UnitTests.Controller
 
             //Act 
             var result = await _walksController.GetAllWalks(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<int>());
-            
+
             //Assert
             var okObjectResult = Assert.IsType<OkObjectResult>(result);
             var returnValueType = Assert.IsAssignableFrom<List<WalkDto>>(okObjectResult.Value);
             Assert.Equal(2, returnValueType.Count);
+        }
+
+        [Fact]
+        public async Task WalksController_DeleteWalk_ReturnsOk()
+        {
+            //Arrange
+            var id = Guid.NewGuid();
+            var walksDomain = new List<Walk>()
+            {
+                new Walk
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Walk One",
+                    Description = "First sample walk",
+                    LengthInKm = 3.5,
+                    WalkImageUrl = "https://example.com/walk1.jpg",
+                    DifficultyId = Guid.NewGuid(),
+                    RegionId = Guid.NewGuid(),
+                    Difficulty = new Difficulty
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "Easy"
+                    },
+                    Region = new Region
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "Region One",
+                        Code = "R1"
+                    }
+                },
+                new Walk
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Walk Two",
+                    Description = "Second sample walk",
+                    LengthInKm = 7.8,
+                    WalkImageUrl = "https://example.com/walk2.jpg",
+                    DifficultyId = Guid.NewGuid(),
+                    RegionId = Guid.NewGuid(),
+                    Difficulty = new Difficulty
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "Medium"
+                    },
+                    Region = new Region
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "Region Two",
+                        Code = "R2"
+                    }
+                }
+            };
+
+            var walksDto = new List<WalkDto>
+            {
+                new WalkDto
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Walk One",
+                    Description = "First sample walk",
+                    LengthInKm = 3.5,
+                    WalkImageUrl = "https://example.com/walk1.jpg",
+                    DifficultyId = Guid.NewGuid(),
+                    RegionId = Guid.NewGuid(),
+                    DifficultyDto = new DifficultyDto
+                    {
+                        Name = "Easy"
+                    },
+                    RegionDto = new RegionDtoForWalks
+                    {
+                        Name = "Region One",
+                        Code = "R1"
+                    }
+                },
+                new WalkDto
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Walk Two",
+                    Description = "Second sample walk",
+                    LengthInKm = 7.8,
+                    WalkImageUrl = "https://example.com/walk2.jpg",
+                    DifficultyId = Guid.NewGuid(),
+                    RegionId = Guid.NewGuid(),
+                    DifficultyDto = new DifficultyDto
+                    {
+                        Name = "Medium"
+                    },
+                    RegionDto = new RegionDtoForWalks
+                    {
+                        Name = "Region Two",
+                        Code = "R2"
+                    }
+                }
+            };
+
+            _walkRepository.Setup(repo => repo.DeleteWalkAsync(id)).ReturnsAsync(walksDomain);
+            _mapper.Setup(mapper => mapper.Map<List<WalkDto>>(walksDomain)).Returns(walksDto);
+
+            //Act
+            var result = await _walksController.DeleteWalk(id);
+
+            //Assert
+            var okObjectResult = Assert.IsType<OkObjectResult>(result);
+            var returnValueType = Assert.IsAssignableFrom<List<WalkDto>>(okObjectResult.Value);
         }
     }
 }

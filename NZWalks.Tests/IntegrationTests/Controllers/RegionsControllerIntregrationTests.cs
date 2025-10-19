@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Azure;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using NZWalks.Controllers;
 using NZWalks.Data;
 using NZWalks.Models.Domain;
 using NZWalks.Models.DTOs;
@@ -67,6 +69,85 @@ namespace NZWalks.Tests.IntegrationTests.Controllers
             };
             var regionDto = JsonSerializer.Deserialize<RegionDto>(content, options);
             Assert.NotNull(regionDto);
+        }
+
+        [Fact]
+        public async Task Delete_WhenCalled_ReturnsOk()
+        {
+            //Arrange
+            var id = Guid.NewGuid();
+            var client = _factory.CreateClient();
+
+            // Act
+            var response = await client.DeleteAsync($"/api/Regions/{id}");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadFromJsonAsync<List<RegionDto>>();
+            Assert.NotNull(content);
+            Assert.DoesNotContain(content, r => r.Id == id);
+        }
+
+        [Fact]
+        public async Task Create_WhenCalled_ReturnsCreatedRegion()
+        {
+            // Arrange
+            var client = CustomClient();
+            var newRegion = new AddRegionRequestDto
+            {
+                Code = "R003",
+                Name = "Region 3"
+            };
+
+            // Act
+            var response = await client.PostAsJsonAsync("/api/Regions", newRegion);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            var createdRegion = await response.Content.ReadFromJsonAsync<RegionDto>();
+            Assert.NotNull(createdRegion);
+            Assert.Equal(newRegion.Code, createdRegion.Code);
+            Assert.Equal(newRegion.Name, createdRegion.Name);
+        }
+
+        [Fact]
+        public async Task Update_WhenCalled_ReturnsOk()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+            var regionId = Guid.NewGuid();
+
+            var createResponse = await client.PostAsJsonAsync("/api/regions", new
+            {
+                Id = regionId,
+                Code = "NZ-N",
+                Name = "North",
+                Area = 1000,
+                Lat = -36.8485,
+                Long = 174.7633,
+                Population = 1500000
+            });
+            createResponse.EnsureSuccessStatusCode();
+
+            var updateRequest = new
+            {
+                Code = "NZ-NE",
+                Name = "North East",
+                Area = 1200,
+                Lat = -36.0,
+                Long = 175.0,
+                Population = 1600000
+            };
+
+            // Act
+            var response = await client.PutAsJsonAsync($"/api/regions/{regionId}", updateRequest);
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            var updatedRegion = await response.Content.ReadFromJsonAsync<RegionDto>();
+            Assert.NotNull(updatedRegion);
+            Assert.Equal("NZ-NE", updatedRegion.Code);
+            Assert.Equal("North East", updatedRegion.Name);
         }
 
         private HttpClient CustomClient()
