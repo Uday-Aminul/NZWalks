@@ -148,7 +148,7 @@ namespace NZWalks.Test.UnitTests.Controller
             var result = await regionsController.Update(id, updatedRegion);
 
             //Assert
-            var okObjectResult = Assert.IsType<OkObjectResult>(result);
+            var okObjectResult = Assert.IsType<CreatedAtActionResult>(result);
             var returnValueType = Assert.IsAssignableFrom<RegionDto>(okObjectResult.Value);
             Assert.Equal(regionDto.Name, returnValueType.Name);
             Assert.Equal(regionDto.Code, returnValueType.Code);
