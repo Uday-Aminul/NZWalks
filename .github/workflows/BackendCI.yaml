@@ -1,0 +1,39 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Main Project Setup
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+      - name: Restore Dependencies
+        run: dotnet restore NZWalks.Api/NZWalks.sln
+      - name: Build
+        run: dotnet build NZWalks.Api/NZWalks.sln --no-restore
+      - name: Run Project
+        run: dotnet run --project NZWalks.Api/NZWalks.csproj
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Test Project Setup
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+      - name: Restore Dependencies
+        run: dotnet restore NZWalks.Tests/NZWalks.Test.sln
+      - name: Build
+        run: dotnet build NZWalks.Tests/NZWalks.Test.sln --no-restore
+      - name: Run Tests
+        run: dotnet test NZWalks.Tests/NZWalks.Test.sln --no-build --verbosity normal
