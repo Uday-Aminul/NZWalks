@@ -18,8 +18,6 @@ jobs:
         run: dotnet restore NZWalks.Api/NZWalks.sln
       - name: Build
         run: dotnet build NZWalks.Api/NZWalks.sln --no-restore
-      - name: Run Project
-        run: dotnet run --project NZWalks.Api/NZWalks.csproj
 
   test:
     needs: build
